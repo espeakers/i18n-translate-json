@@ -1,0 +1,4 @@
+{
+  "TEST_STRING_1": "I am a test string, hello everyone",
+  "TEST_STRING_HTML_2" : "<b>I am also a test string, but in html</b>"
+}

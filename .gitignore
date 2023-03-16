@@ -30,5 +30,5 @@ node_modules
 test/config.js
 
 # Examples
-examples/*
+examples/locales/*
 !examples/locales/en/*

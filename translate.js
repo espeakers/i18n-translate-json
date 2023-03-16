@@ -9,12 +9,12 @@ var TRANSERR = {
 };
 
 // RUN
-var run = function(apiKey, dir, sourceLanguage, languages, includeHtml, finish) {
+const run = function(apiKey, dir, sourceLanguage, languages, includeHtml, finish) {
 
-  var ggl = google(apiKey);
+  const ggl = google(apiKey);
 
   // TRANSLATE
-  var translate = function(text, language, callback) {
+  const translate = function(text, language, callback) {
 
     // passthrough if contains HTML
     if (!includeHtml && /<[a-z][\s\S]*>/i.test(text) == true) {
@@ -46,48 +46,48 @@ var run = function(apiKey, dir, sourceLanguage, languages, includeHtml, finish) 
   };
 
   // PROCESS FILE
-  var processFile = function(file, callback) {
-
+  const processFile = function(file, callback) {
     // open file
-    fs.readFile(dir + file, function(err, data) {
+    let f = file;
+    fs.readFile(dir + sourceLanguage + '/' + f, function(err, data) {
 
       // bubble up error
       if (err) {
         return callback({
-          "file": file,
+          "file": f,
           "error": err
         }, null);
       }
 
       data = data.toString();
 
-      var parsed;
+      let parsed;
       try {
         parsed = JSON.parse(data);
       } catch (e) {
         return callback({
-          "file": file,
+          "file": f,
           "error": e
         }, null);
       }
 
-      var traversed = traverse(parsed);
+      let traversed = traverse(parsed);
 
-      var targets = {};
+      let targets = {};
 
       // create targets for every language
-      for (var l in languages) {
-        var lang = languages[l];
+      for (let l in languages) {
+        let lang = languages[l];
         targets[lang] = traverse(traversed.clone());
       }
 
       // find all paths of the object keys recursively
-      var paths = traversed.paths();
+      let paths = traversed.paths();
 
       // translate each path
       async.map(paths, function(path, done) {
 
-        var text = traversed.get(path);
+        let text = traversed.get(path);
 
         // only continue for strings
         if (typeof(text) !== "string") {
@@ -103,10 +103,10 @@ var run = function(apiKey, dir, sourceLanguage, languages, includeHtml, finish) 
             // add new value to path
             targets[language].set(path, translation);
 
-            var e = null;
+            let e = null;
             if (err === TRANSERR.NOT_TRANSLATED) {
               e = {
-                "file": file,
+                "file": f,
                 "path": path,
                 "text": text,
                 "source": sourceLanguage,
@@ -121,15 +121,18 @@ var run = function(apiKey, dir, sourceLanguage, languages, includeHtml, finish) 
           // so call the done callback of the map through all paths
         }, done);
       },
-
         // all are translated
         function(err, results) {
-
           // write translated targets to files
-          for (var t in targets) {
-            var transStr = JSON.stringify(targets[t].value, null, "\t");
+          for (let t in targets) {
+            let transStr = JSON.stringify(targets[t].value, null, "\t");
 
-            var p = dir + t + ".json";
+            if (!fs.existsSync(dir + t)) {
+              fs.mkdirSync(dir + t);
+            }
+
+            let p = dir + t + '/' + f;
+
             fs.writeFileSync(p, transStr);
 
             // add language to source file
@@ -137,10 +140,10 @@ var run = function(apiKey, dir, sourceLanguage, languages, includeHtml, finish) 
           }
 
           // filter out null results, to just return the not translated ones
-          notTranslated = results.filter(function(item)  {
+          notTranslated = results.filter(function(item) {
 
             // check if array only contains nulls
-            for (var i in item) {
+            for (let i in item) {
               if (item[i] != null) {
                 return true;
               }
@@ -162,8 +165,15 @@ var run = function(apiKey, dir, sourceLanguage, languages, includeHtml, finish) 
     });
   };
 
-  // process the source file
-  processFile(sourceLanguage + '.json', finish);
+  // process the source files
+  fs.readdir(dir + sourceLanguage, (err, files) => {
+    if (err) return finish(err);
+    files.forEach(function(file) {
+      processFile(file, function(err, results) {
+        if (err) return finish(err, results)
+      })
+    })
+  })
 };
 
 // EXPORTS

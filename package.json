@@ -1,11 +1,9 @@
 {
-  "name": "i18n-translate-json",
+  "name": "i18n-translate-locale",
   "description": "Automatically translates i18n JSON files via Google Translate API",
-  "preferGlobal": true,
   "version": "1.1.0",
-  "private": false,
-  "author": "Meedan",
-  "contributors": ["Steffion"],
+  "author": "espeakers",
+  "contributors": ["Steffion", "Mark Hobson"],
   "dependencies": {
     "async": "3.2.0",
     "get-json": "1.0.1",
@@ -23,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/meedan/i18n-translate-json.git"
+    "url": "https://github.com/espeakers/i18n-translate-json.git"
   },
   "keywords": [
     "i18n",
@@ -40,5 +38,5 @@
   "bugs": {
     "url": "https://github.com/meedan/i18n-translate-json/issues"
   },
-  "homepage": "https://github.com/meedan/i18n-translate-json"
+  "homepage": "https://github.com/espeakers/i18n-translate-json"
 }

@@ -12,11 +12,11 @@ var argv = require("yargs")
     .describe("includeHtml", "Include HTML entries in the translation")
     .help("h")
     .alias("h", "help")
-    .example("$0 YOUR_API_KEY examples/ en nl,de", "Translate the file examples/en.json to examples/nl.json and examples/de.json")
+    .example("$0 YOUR_API_KEY examples/locales/ en nl,de", "Translate the files in examples/locales/en/ to examples/locales/nl/ and examples/locales/de/ matching file names")
     .argv;
 
 if (argv._.length < 4) {
-  console.error("Usage: i18-translate-json <apiKey> <startDir> <sourceLang> <targetLang1,targetLang2,..>");
+  console.error("Usage: i18n-translate-locale <apiKey> <startDir> <sourceLang> <targetLang1,targetLang2,..>");
   return 1;
 }
 
@@ -37,8 +37,7 @@ var run = function() {
   path.resolve(__dirname, startDir);
 
   translate.run(apiKey, startDir, sourceLang, targetLang, argv.includeHtml, function(err, result) {
-  
-  	if (err) {
+    if (err) {
   		console.log("ERROR:");
   		console.log(err);
   		process.exit(0);

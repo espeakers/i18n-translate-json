@@ -31,4 +31,4 @@ test/config.js
 
 # Examples
 examples/*
-!examples/en.json
+!examples/locales/en/*

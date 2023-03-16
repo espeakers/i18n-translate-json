@@ -31,4 +31,4 @@ test/config.js
 
 # Examples
 examples/locales/*
-!examples/locales/en/*
+!examples/locales/en

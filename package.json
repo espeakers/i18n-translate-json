@@ -1,9 +1,12 @@
 {
   "name": "i18n-translate-locale",
   "description": "Automatically translates i18n JSON files via Google Translate API",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "espeakers",
-  "contributors": ["Steffion", "Mark Hobson"],
+  "contributors": [
+    "Steffion",
+    "Mark Hobson"
+  ],
   "dependencies": {
     "async": "3.2.0",
     "get-json": "1.0.1",
@@ -12,9 +15,9 @@
     "yargs": "^15.3.1"
   },
   "devDependencies": {
+    "glob": "*",
     "mocha": "*",
-    "should": ">=13.2.3",
-    "glob": "*"
+    "should": ">=13.2.3"
   },
   "scripts": {
     "test": "echo 'No tests yet' && exit 0"

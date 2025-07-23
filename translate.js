@@ -169,7 +169,7 @@ const run = function(apiKey, dir, sourceLanguage, languages, includeHtml, finish
   fs.readdir(dir + sourceLanguage, (err, files) => {
     if (err) return finish(err);
     files.forEach(function(file) {
-      fs.stat(file, function(err, stat) {
+      fs.stat(dir + sourceLanguage + '/' + file, function(err, stat) {
         if (err) {
           return finish(err, stat)
         }

@@ -168,10 +168,13 @@ const run = function(apiKey, dir, sourceLanguage, languages, includeHtml, finish
   // process the source files
   fs.readdir(dir + sourceLanguage, (err, files) => {
     if (err) return finish(err);
-    files.forEach(function(file) {
-      processFile(file, function(err, results) {
-        if (err) return finish(err, results)
-      })
+    files.forEach(async function(file) {
+      const stats = await fs.stat(file);
+      if (stats.isFile()) {
+        processFile(file, function (err, results) {
+          if (err) return finish(err, results)
+        })
+      }
     })
   })
 };
